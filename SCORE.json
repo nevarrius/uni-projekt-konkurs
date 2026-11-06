@@ -1,0 +1,39 @@
+{
+  "author": "nevarious",
+  "agent": "claude-opus-5-5",
+  "metric": "balanced_accuracy",
+  "higher_is_better": true,
+  "tracks": {
+    "open": {
+      "cv_score": 0.4689,
+      "cv_std": 0.0072,
+      "holdout_score": 0.4672,
+      "folds": {
+        "2012/2013": 0.4595,
+        "2013/2014": 0.4705,
+        "2014/2015": 0.4769
+      },
+      "models": [
+        "LGBMRegressor",
+        "LogisticRegression"
+      ],
+      "summary": "kursy + destylacja kursów (średnia LightGBM i LogReg soft z Elo/formy/tabeli/FIFA) dla lig bez kursów + końcowa LogReg, decyzja argmax p/prior",
+      "updated": "2026-11-06T12:59:04"
+    },
+    "classic": {
+      "cv_score": 0.4706,
+      "cv_std": 0.0068,
+      "holdout_score": 0.4645,
+      "folds": {
+        "2012/2013": 0.4625,
+        "2013/2014": 0.4702,
+        "2014/2015": 0.4791
+      },
+      "models": [
+        "LogisticRegression"
+      ],
+      "summary": "kursy + destylacja kursów (LogReg na miękkich etykietach z Elo/formy/tabeli/FIFA) dla lig bez kursów + końcowa LogReg, decyzja argmax p/prior",
+      "updated": "2026-11-06T12:59:20"
+    }
+  }
+}

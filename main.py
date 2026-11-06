@@ -17,8 +17,8 @@ from common.data import load_table
 from common.evaluation import METRIC, evaluate, make_target
 from common.tracks import TRACKS
 
-AUTHOR = "baseline"  # ← ustaw swój nick (jak w nazwie brancha agent/<nick>)
-AGENT = "-"          # ← model agenta AI, np. "claude-opus-5-5"
+AUTHOR = "nevarious"
+AGENT = "claude-opus-5-5"
 SCORE_PATH = Path("SCORE.json")
 
 
