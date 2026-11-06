@@ -5,33 +5,13 @@
   "higher_is_better": true,
   "tracks": {
     "open": {
-      "cv_score": 0.4709,
-      "cv_std": 0.0062,
-      "holdout_score": 0.4622,
+      "cv_score": 0.4716,
+      "cv_std": 0.0054,
+      "holdout_score": 0.4631,
       "folds": {
-        "2012/2013": 0.4621,
-        "2013/2014": 0.4744,
-        "2014/2015": 0.4761
-      },
-      "models": [
-        "VotingClassifier",
-        "LogisticRegression",
-        "RandomForestClassifier",
-        "MLPClassifier",
-        "CatBoostClassifier",
-        "HistGradientBoostingClassifier"
-      ],
-      "summary": "blend: soft voting LogReg+RF+MLP (x3) + CatBoost + HistGB; kursy (Shin), Elo, pi-ratings, forma, tabela, H2H, FIFA składów/drużyn, cechy Poissona; decyzja argmax p/prior pod BA",
-      "updated": "2026-11-06T13:09:41"
-    },
-    "classic": {
-      "cv_score": 0.4703,
-      "cv_std": 0.0064,
-      "holdout_score": 0.4645,
-      "folds": {
-        "2012/2013": 0.4627,
-        "2013/2014": 0.4699,
-        "2014/2015": 0.4783
+        "2012/2013": 0.4649,
+        "2013/2014": 0.472,
+        "2014/2015": 0.478
       },
       "models": [
         "VotingClassifier",
@@ -39,8 +19,26 @@
         "RandomForestClassifier",
         "MLPClassifier"
       ],
-      "summary": "soft voting LogReg+RF+MLP na kursach (Shin), Elo, pi-ratings, formie, tabeli, H2H, atrybutach FIFA składów/drużyn; decyzja argmax p/prior pod BA",
-      "updated": "2026-11-06T13:10:52"
+      "summary": "hybryda: z kursami 0.75·kursy(Shin)+0.25·voting, bez kursów voting LogReg+RF+MLP na destylowanych kursach (destylacja wg agent/nevarious); Elo, pi-ratings, forma, tabela, H2H, FIFA; decyzja p/prior",
+      "updated": "2026-11-06T13:21:57"
+    },
+    "classic": {
+      "cv_score": 0.4713,
+      "cv_std": 0.0071,
+      "holdout_score": 0.4637,
+      "folds": {
+        "2012/2013": 0.4637,
+        "2013/2014": 0.4694,
+        "2014/2015": 0.4808
+      },
+      "models": [
+        "VotingClassifier",
+        "LogisticRegression",
+        "RandomForestClassifier",
+        "MLPClassifier"
+      ],
+      "summary": "hybryda: z kursami 0.5·LogReg(log-kursy)+0.5·voting, bez kursów voting na destylowanych kursach (destylacja wg agent/nevarious); soft voting LogReg+RF+MLP na kursach (Shin), Elo, pi-ratings, formie, tabeli, H2H, atrybutach FIFA składów/drużyn; decyzja argmax p/prior pod BA",
+      "updated": "2026-11-06T13:23:12"
     }
   }
 }

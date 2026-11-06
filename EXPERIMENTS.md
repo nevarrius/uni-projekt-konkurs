@@ -4,6 +4,26 @@ Uwaga metodologiczna: różnice BA < ~0.005 to szum (fold ≈ 3 tys. meczów →
 Oprócz oficjalnego CV (3 foldy) patrzę też na **CV5** — walk-forward z 5 foldami (walidacja 2010/11–2014/15,
 tylko sezony treningowe, bez holdoutu) — i wybieram konfiguracje dobre w obu.
 
+## 2026-11-06 17:30 — [oba] destylacja kursów + hybryda rynek/voting  →  open cv=0.4716 ± 0.0054 (+0.0007), classic cv=0.4713 ± 0.0071 (+0.0010)
+- **Inspiracja: agent/nevarious @ 852427d** (solutions/stack.py) — destylacja kursów dla lig bez kursów (PL, CH).
+  Przeniesione do `solutions/distill.py`: LogReg na miękkich etykietach (wiersz ×3, waga = prawdop. Shina),
+  uczona na treningowych meczach z kursami, z cech bez kursów/ligi; uzupełnia brakujące odds_* + flaga odds_missing.
+- Analiza per podzbiór (CV5, BA):
+  | wariant | mecze z kursami | bez kursów | całość CV5 / CV3 |
+  |---|---|---|---|
+  | voting (poprzedni) | 0.4726 | 0.4137 | 0.4649 / 0.4703 |
+  | sam rynek (Shin) + destylat, p/prior | **0.4770** | 0.4036 | 0.4672 / 0.4688 |
+  | voting na cechach z destylatem | 0.4720 | **0.4209** | 0.4656 / 0.4696 |
+- Wniosek: na meczach z kursami rynek bije moje modele (potwierdza obserwację nevarious); bez kursów najlepszy
+  jest voting z destylatem jako cechą (lepszy niż sam destylat). → hybryda per podzbiór:
+  - z kursami: α·rynek + (1−α)·voting — α=1: 0.4698/0.4713, **α=0.75: 0.4700/0.4716**, α=0.5: 0.4690/0.4717 (CV5/CV3).
+  - rynek przez LogReg(log Shin) zamiast surowo: α=0.5: 0.4680/0.4713 (−0.002 CV5, szum).
+- **open**: 0.75·surowy rynek + 0.25·voting. CV5 0.4700. HO 0.4631.
+- **classic**: 0.5·LogReg(log kursów) + 0.5·voting — rynek przez dozwolony model kalibrujący (surowe kursy jako
+  „predykcja” to nie model z listy, więc wolę wersję bezpieczną regulaminowo). CV5 0.4680. HO 0.4637.
+- Porażki: CatBoost/HGB w hybrydzie pogarszają (open blend z GB: CV5 0.4688 przy α=1, 0.4652 gdy GB zamiast votingu).
+  Destylat MLPRegressor nie testowany (nevarious: gorszy niż LogReg soft).
+
 ## 2026-11-06 16:00 — [oba] soft voting LogReg+RF+MLP (classic) i + CatBoost + HistGB (open)  →  classic cv=0.4703 ± 0.0064, open cv=0.4709 ± 0.0062
 - classic: VotingClassifier(soft) LogReg(C=.05) + RF(500, leaf=30, mf=.3) + MLP(16, alpha=10). CV5=0.4649. Holdout 0.4645.
 - open: (3·P_voting + P_CatBoost + P_HGB)/5, decyzja p/prior. CV5=0.4656. Holdout 0.4622.
