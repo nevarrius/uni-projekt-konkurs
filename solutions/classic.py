@@ -9,21 +9,29 @@ from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 
 from common.tracks import assert_classic
+from solutions.decision import split_meta
 from solutions.features import build_features
 
 SEED = 42
-MODELS = ["LogisticRegression"]  # zadeklaruj użyte modele (trafia do SCORE.json)
-SUMMARY = "LogReg(balanced) na implikowanych prawdop. z kursów bukmacherów"
+MODELS = ["LogisticRegression"]
+SUMMARY = ("LogReg(balanced, C=0.003) na: kursach bez marży, Elo, formie, tabeli, H2H, "
+           "ratingach FIFA składów (wg formacji), atrybutach taktycznych drużyn")
 
 __all__ = ["build_features", "fit_predict", "MODELS", "SUMMARY"]
 
 
-def fit_predict(X_train, y_train, X_test):
-    model = make_pipeline(
-        SimpleImputer(strategy="median"),
+def make_model():
+    return make_pipeline(
+        SimpleImputer(strategy="median", add_indicator=True),
         StandardScaler(),
-        LogisticRegression(class_weight="balanced", max_iter=1000, random_state=SEED),
+        LogisticRegression(C=0.003, class_weight="balanced", max_iter=2000, random_state=SEED),
     )
+
+
+def fit_predict(X_train, y_train, X_test):
+    X_train, _ = split_meta(X_train)
+    X_test, _ = split_meta(X_test)
+    model = make_model()
     assert_classic(model)
     model.fit(X_train, y_train)
     return model.predict(X_test)

@@ -5,34 +5,34 @@
   "higher_is_better": true,
   "tracks": {
     "open": {
-      "cv_score": 0.4535,
-      "cv_std": 0.0101,
-      "holdout_score": 0.4509,
+      "cv_score": 0.4652,
+      "cv_std": 0.0074,
+      "holdout_score": 0.4587,
       "folds": {
-        "2012/2013": 0.4392,
-        "2013/2014": 0.4601,
-        "2014/2015": 0.4612
+        "2012/2013": 0.4643,
+        "2013/2014": 0.4566,
+        "2014/2015": 0.4746
       },
       "models": [
         "HistGradientBoostingClassifier"
       ],
-      "summary": "HistGradientBoosting(balanced) na implikowanych prawdop. z kursów bukmacherów",
-      "updated": "2026-11-06T12:47:37"
+      "summary": "HistGradientBoosting(balanced) na: kursach bez marży, Elo, formie, tabeli, H2H, ratingach FIFA składów (wg formacji), atrybutach taktycznych drużyn",
+      "updated": "2026-11-06T13:00:12"
     },
     "classic": {
-      "cv_score": 0.4587,
-      "cv_std": 0.0128,
-      "holdout_score": 0.4565,
+      "cv_score": 0.468,
+      "cv_std": 0.0048,
+      "holdout_score": 0.4648,
       "folds": {
-        "2012/2013": 0.4413,
-        "2013/2014": 0.463,
-        "2014/2015": 0.4718
+        "2012/2013": 0.4636,
+        "2013/2014": 0.4657,
+        "2014/2015": 0.4747
       },
       "models": [
         "LogisticRegression"
       ],
-      "summary": "LogReg(balanced) na implikowanych prawdop. z kursów bukmacherów",
-      "updated": "2026-11-06T12:47:37"
+      "summary": "LogReg(balanced, C=0.003) na: kursach bez marży, Elo, formie, tabeli, H2H, ratingach FIFA składów (wg formacji), atrybutach taktycznych drużyn",
+      "updated": "2026-11-06T13:00:15"
     }
   }
 }
