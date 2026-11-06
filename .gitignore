@@ -1,0 +1,18 @@
+# Python / uv
+__pycache__/
+*.py[cod]
+.venv/
+.ipynb_checkpoints/
+
+# Dane i artefakty (dane pobiera kagglehub do ~/.cache — nie trafiają do repo)
+data/
+*.sqlite
+models/
+outputs/
+*.pkl
+*.joblib
+catboost_info/
+mlruns/
+
+# Sekrety
+.env
