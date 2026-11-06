@@ -1,0 +1,38 @@
+{
+  "author": "konrad",
+  "agent": "claude-opus-5-5",
+  "metric": "balanced_accuracy",
+  "higher_is_better": true,
+  "tracks": {
+    "open": {
+      "cv_score": 0.4535,
+      "cv_std": 0.0101,
+      "holdout_score": 0.4509,
+      "folds": {
+        "2012/2013": 0.4392,
+        "2013/2014": 0.4601,
+        "2014/2015": 0.4612
+      },
+      "models": [
+        "HistGradientBoostingClassifier"
+      ],
+      "summary": "HistGradientBoosting(balanced) na implikowanych prawdop. z kursów bukmacherów",
+      "updated": "2026-11-06T12:47:37"
+    },
+    "classic": {
+      "cv_score": 0.4587,
+      "cv_std": 0.0128,
+      "holdout_score": 0.4565,
+      "folds": {
+        "2012/2013": 0.4413,
+        "2013/2014": 0.463,
+        "2014/2015": 0.4718
+      },
+      "models": [
+        "LogisticRegression"
+      ],
+      "summary": "LogReg(balanced) na implikowanych prawdop. z kursów bukmacherów",
+      "updated": "2026-11-06T12:47:37"
+    }
+  }
+}
