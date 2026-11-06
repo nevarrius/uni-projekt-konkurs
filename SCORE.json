@@ -5,34 +5,34 @@
   "higher_is_better": true,
   "tracks": {
     "open": {
-      "cv_score": 0.4652,
-      "cv_std": 0.0074,
-      "holdout_score": 0.4587,
+      "cv_score": 0.4726,
+      "cv_std": 0.0062,
+      "holdout_score": 0.4649,
       "folds": {
-        "2012/2013": 0.4643,
-        "2013/2014": 0.4566,
-        "2014/2015": 0.4746
-      },
-      "models": [
-        "HistGradientBoostingClassifier"
-      ],
-      "summary": "HistGradientBoosting(balanced) na: kursach bez marży, Elo, formie, tabeli, H2H, ratingach FIFA składów (wg formacji), atrybutach taktycznych drużyn",
-      "updated": "2026-11-06T13:00:12"
-    },
-    "classic": {
-      "cv_score": 0.468,
-      "cv_std": 0.0048,
-      "holdout_score": 0.4648,
-      "folds": {
-        "2012/2013": 0.4636,
-        "2013/2014": 0.4657,
-        "2014/2015": 0.4747
+        "2012/2013": 0.4734,
+        "2013/2014": 0.4647,
+        "2014/2015": 0.4798
       },
       "models": [
         "LogisticRegression"
       ],
-      "summary": "LogReg(balanced, C=0.003) na: kursach bez marży, Elo, formie, tabeli, H2H, ratingach FIFA składów (wg formacji), atrybutach taktycznych drużyn",
-      "updated": "2026-11-06T13:00:15"
+      "summary": "LogReg(balanced, C=0.003) — jak classic (lepszy na CV niż CatBoost/HGB/blendy); kursy bez marży + ratingi FIFA wyjściowej 11 (wg formacji) + kontekst",
+      "updated": "2026-11-06T13:11:39"
+    },
+    "classic": {
+      "cv_score": 0.4726,
+      "cv_std": 0.0062,
+      "holdout_score": 0.4649,
+      "folds": {
+        "2012/2013": 0.4734,
+        "2013/2014": 0.4647,
+        "2014/2015": 0.4798
+      },
+      "models": [
+        "LogisticRegression"
+      ],
+      "summary": "LogReg(balanced, C=0.003) na zwartym zestawie: kursy bez marży (śr./std z 10 bukmacherów), ratingi FIFA wyjściowej 11 (mean/max/min, wg formacji), stage, liga, miesiąc",
+      "updated": "2026-11-06T13:11:41"
     }
   }
 }

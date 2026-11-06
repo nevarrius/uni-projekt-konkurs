@@ -231,6 +231,57 @@ def team_features(m: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
+# --------------------------------------------------------------------------- dynamiczny model Poissona
+def poisson_features(m: pd.DataFrame, alpha: float = 0.07, alpha_lg: float = 0.01) -> pd.DataFrame:
+    """Wygładzane wykładniczo siły ataku/obrony (osobno dom/wyjazd) → λ goli → P(H/D/A) z rozkładu Poissona.
+
+    Stan zapisywany PRZED aktualizacją bieżącym meczem (bez wycieku)."""
+    from math import exp, factorial
+
+    order = np.argsort(m["date"].to_numpy(), kind="stable")
+    home, away = m["home_team_api_id"].to_numpy(), m["away_team_api_id"].to_numpy()
+    hg, ag = m["home_team_goal"].to_numpy(float), m["away_team_goal"].to_numpy(float)
+    lg = m["league_id"].to_numpy()
+    lg_h: dict = {}
+    lg_a: dict = {}
+    lg_d: dict = {}
+    att_h: dict = {}
+    def_h: dict = {}
+    att_a: dict = {}
+    def_a: dict = {}
+    n = len(m)
+    lam_h, lam_a, lgd = np.empty(n), np.empty(n), np.empty(n)
+    for i in order:
+        L, h, a = lg[i], home[i], away[i]
+        if L not in lg_h:
+            lg_h[L], lg_a[L], lg_d[L] = 1.5, 1.1, 0.26
+        lh, la = lg_h[L], lg_a[L]
+        att_h.setdefault(h, lh); def_h.setdefault(h, la)
+        att_a.setdefault(a, la); def_a.setdefault(a, lh)
+        lam_h[i] = att_h[h] * def_a[a] / lh
+        lam_a[i] = att_a[a] * def_h[h] / la
+        lgd[i] = lg_d[L]
+        # aktualizacja po meczu
+        att_h[h] += alpha * (hg[i] - att_h[h]); def_h[h] += alpha * (ag[i] - def_h[h])
+        att_a[a] += alpha * (ag[i] - att_a[a]); def_a[a] += alpha * (hg[i] - def_a[a])
+        lg_h[L] += alpha_lg * (hg[i] - lh); lg_a[L] += alpha_lg * (ag[i] - la)
+        lg_d[L] += alpha_lg * (float(hg[i] == ag[i]) - lg_d[L])
+    k = np.arange(11)
+    fact = np.array([factorial(int(x)) for x in k], dtype=float)
+    ph = np.exp(-lam_h)[:, None] * lam_h[:, None] ** k / fact
+    pa = np.exp(-lam_a)[:, None] * lam_a[:, None] ** k / fact
+    joint = ph[:, :, None] * pa[:, None, :]
+    p_home = np.tril(np.ones((11, 11)), -1)
+    pH = (joint * p_home).sum((1, 2))
+    pD = np.einsum("nii->n", joint)
+    pA = (joint * p_home.T).sum((1, 2))
+    tot = pH + pD + pA
+    return pd.DataFrame({
+        "pois_lam_h": lam_h, "pois_lam_a": lam_a, "pois_lam_diff": lam_h - lam_a,
+        "pois_pH": pH / tot, "pois_pD": pD / tot, "pois_pA": pA / tot, "league_draw_rate": lgd,
+    }, index=m.index)
+
+
 # --------------------------------------------------------------------------- całość
 def build_features(matches: pd.DataFrame) -> pd.DataFrame:
     m = matches.copy()
@@ -241,10 +292,30 @@ def build_features(matches: pd.DataFrame) -> pd.DataFrame:
         form_features(m),
         player_features(m),
         team_features(m),
+        poisson_features(m),
     ]
     X = pd.concat(parts, axis=1)
+    # bliskość sił (remis) — nieliniowość dla modeli liniowych
+    X["abs_elo"] = (X["elo_diff"] + 65.0).abs()
+    X["abs_ovr"] = X["d_ovr_mean"].abs()
+    X["abs_ppg"] = X["d_season_ppg"].abs()
+    X["abs_pts_ewm"] = X["d_pts_ewm"].abs()
+    X["abs_pois"] = X["pois_lam_diff"].abs()
     X["stage_frac"] = m["stage"] / m.groupby(["league_id", "season"])["stage"].transform("max")
     X["league_id"] = m["league_id"]
     X["month"] = m["date"].dt.month
     X["season_idx"] = m["season"].map({s: i for i, s in enumerate(SEASONS)})  # meta, usuwana przed modelem
     return X.astype(float)
+
+
+def compact_columns(X: pd.DataFrame) -> list[str]:
+    """Zwarty zestaw: kursy + ratingi FIFA wyjściowej 11 + kontekst (najlepszy w przeszukaniu podzbiorów grup na CV).
+
+    Elo / forma / tabela / atrybuty drużyn są w dużej mierze redundantne względem kursów i dokładają szum."""
+    keep = []
+    for c in X.columns:
+        if c.startswith("odds_") or c in ("stage_frac", "league_id", "month", "season_idx"):
+            keep.append(c)
+        elif "_ovr_" in c or c.startswith("d_ovr") or "pot_mean" in c or c in ("d_att_vs_def", "d_def_vs_att"):
+            keep.append(c)
+    return keep

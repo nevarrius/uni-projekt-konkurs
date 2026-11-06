@@ -3,21 +3,27 @@
 Każdy model MUSI przejść przez assert_classic() przed treningiem.
 """
 
+import pandas as pd
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 
 from common.tracks import assert_classic
+from solutions import features
 from solutions.decision import split_meta
-from solutions.features import build_features
 
 SEED = 42
 MODELS = ["LogisticRegression"]
-SUMMARY = ("LogReg(balanced, C=0.003) na: kursach bez marży, Elo, formie, tabeli, H2H, "
-           "ratingach FIFA składów (wg formacji), atrybutach taktycznych drużyn")
+SUMMARY = ("LogReg(balanced, C=0.003) na zwartym zestawie: kursy bez marży (śr./std z 10 bukmacherów), "
+           "ratingi FIFA wyjściowej 11 (mean/max/min, wg formacji), stage, liga, miesiąc")
 
 __all__ = ["build_features", "fit_predict", "MODELS", "SUMMARY"]
+
+
+def build_features(matches: pd.DataFrame) -> pd.DataFrame:
+    X = features.build_features(matches)
+    return X[features.compact_columns(X)]
 
 
 def make_model():
