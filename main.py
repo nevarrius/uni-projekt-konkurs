@@ -10,15 +10,19 @@ Rozwiązania torów: solutions/open.py i solutions/classic.py
 import argparse
 import importlib
 import json
+import random
 from datetime import datetime
 from pathlib import Path
+
+import numpy as np
 
 from common.data import load_table
 from common.evaluation import METRIC, evaluate, make_target
 from common.tracks import TRACKS
 
-AUTHOR = "baseline"  # ← ustaw swój nick (jak w nazwie brancha agent/<nick>)
-AGENT = "-"          # ← model agenta AI, np. "claude-opus-5-5"
+AUTHOR = "copilot"
+AGENT = "copilot-sdk"
+SEED = 42
 SCORE_PATH = Path("SCORE.json")
 
 
@@ -40,6 +44,9 @@ def run_track(track: str, matches):
 
 
 def main():
+    random.seed(SEED)
+    np.random.seed(SEED)
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--track", choices=TRACKS, help="uruchom tylko jeden tor")
     args = parser.parse_args()

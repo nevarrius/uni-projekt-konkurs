@@ -1,0 +1,38 @@
+{
+  "author": "copilot",
+  "agent": "copilot-sdk",
+  "metric": "balanced_accuracy",
+  "higher_is_better": true,
+  "tracks": {
+    "open": {
+      "cv_score": 0.4544,
+      "cv_std": 0.0073,
+      "holdout_score": 0.453,
+      "folds": {
+        "2012/2013": 0.4445,
+        "2013/2014": 0.4569,
+        "2014/2015": 0.4618
+      },
+      "models": [
+        "HistGradientBoostingClassifier"
+      ],
+      "summary": "HistGradientBoosting(balanced) na kursach, marżach bukmacherów i ich konsensusie",
+      "updated": "2026-11-06T12:51:23"
+    },
+    "classic": {
+      "cv_score": 0.4596,
+      "cv_std": 0.0102,
+      "holdout_score": 0.4566,
+      "folds": {
+        "2012/2013": 0.4462,
+        "2013/2014": 0.4617,
+        "2014/2015": 0.4709
+      },
+      "models": [
+        "LogisticRegression"
+      ],
+      "summary": "LogReg(balanced) z progami dostrojonymi na końcowym fragmencie treningu",
+      "updated": "2026-11-06T12:51:27"
+    }
+  }
+}

@@ -6,7 +6,7 @@ from solutions.features import build_features
 
 SEED = 42
 MODELS = ["HistGradientBoostingClassifier"]  # zadeklaruj użyte modele (trafia do SCORE.json)
-SUMMARY = "HistGradientBoosting(balanced) na implikowanych prawdop. z kursów bukmacherów"
+SUMMARY = "HistGradientBoosting(balanced) na kursach, marżach bukmacherów i ich konsensusie"
 
 __all__ = ["build_features", "fit_predict", "MODELS", "SUMMARY"]
 
