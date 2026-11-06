@@ -1,0 +1,46 @@
+{
+  "author": "oskar",
+  "agent": "claude-opus-5-5",
+  "metric": "balanced_accuracy",
+  "higher_is_better": true,
+  "tracks": {
+    "open": {
+      "cv_score": 0.4709,
+      "cv_std": 0.0062,
+      "holdout_score": 0.4622,
+      "folds": {
+        "2012/2013": 0.4621,
+        "2013/2014": 0.4744,
+        "2014/2015": 0.4761
+      },
+      "models": [
+        "VotingClassifier",
+        "LogisticRegression",
+        "RandomForestClassifier",
+        "MLPClassifier",
+        "CatBoostClassifier",
+        "HistGradientBoostingClassifier"
+      ],
+      "summary": "blend: soft voting LogReg+RF+MLP (x3) + CatBoost + HistGB; kursy (Shin), Elo, pi-ratings, forma, tabela, H2H, FIFA składów/drużyn, cechy Poissona; decyzja argmax p/prior pod BA",
+      "updated": "2026-11-06T13:09:41"
+    },
+    "classic": {
+      "cv_score": 0.4703,
+      "cv_std": 0.0064,
+      "holdout_score": 0.4645,
+      "folds": {
+        "2012/2013": 0.4627,
+        "2013/2014": 0.4699,
+        "2014/2015": 0.4783
+      },
+      "models": [
+        "VotingClassifier",
+        "LogisticRegression",
+        "RandomForestClassifier",
+        "MLPClassifier"
+      ],
+      "summary": "soft voting LogReg+RF+MLP na kursach (Shin), Elo, pi-ratings, formie, tabeli, H2H, atrybutach FIFA składów/drużyn; decyzja argmax p/prior pod BA",
+      "updated": "2026-11-06T13:10:52"
+    }
+  }
+}
